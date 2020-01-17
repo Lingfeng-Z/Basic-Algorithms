@@ -30,7 +30,7 @@ class Graph():
         Node = list(currentNode)
         linklist = []
         for i in range(3):
-            for j in range(0-Node[i], self.dim-Node[i], 1):
+            for j in [-1, 1]:
                 if Node[i] + j >=0 and Node[i] + j< self.dim:
                     if self.energy_dict[tuple(Node[0:i]+[Node[i] + j]+Node[i+1:])] < self.energy_dict[currentNode]:
                         linklist.append(tuple(Node[0:i]+[Node[i] + j]+Node[i+1:]))
@@ -50,6 +50,7 @@ class GraphSearch():
     def DFS(self, graph: Graph):
         max_energy = 0
         sum_energy = 0
+        pop_out = []
         while len(self.stack) != 0:
             current_point = self.stack[-1]
             nodesLinked = graph.link_dict[current_point]
@@ -57,8 +58,13 @@ class GraphSearch():
             if False in visit_nodesLinked:
                 for x in nodesLinked:
                     if self.visited_dict[current_point,x] == False:
-                        self.stack.append(x)
                         self.visited_dict[current_point,x] = True
+                        if len(pop_out) > 1:
+                            for y in pop_out:
+                                for _ in graph.link_dict[y]:
+                                    self.visited_dict[y,_] = False
+                        pop_out = []
+                        self.stack.append(x)
                         break
             else:
                 for x in self.stack:
@@ -67,6 +73,9 @@ class GraphSearch():
                     max_energy = sum_energy
                     max_stack = self.stack
                 sum_energy = 0
+                pop_out.append(self.stack[-1])
+                '''if len(self.stack) != 1:
+                    self.visited_dict[self.stack[-2], self.stack[-1]] = True'''
                 self.stack = self.stack[:-1]
         return max_energy, max_stack
 
