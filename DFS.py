@@ -45,7 +45,7 @@ class GraphSearch():
             for y in graph.link_dict[x]:
                 self.visited_dict[x,y] = False
         self.stack.append(graph.startpoint)
-        self.max_energy, self.route = self.DFS(graph)
+
 
     def DFS(self, graph: Graph):
         max_energy = 0
@@ -113,7 +113,8 @@ if __name__ == "__main__":
         [2,2,2,1]]
     graph1 = Graph(input1, "desc")
     Solu = GraphSearch(graph1)
-    print(Solu.max_energy, Solu.route)
+    max_energy, route = Solu.DFS(graph1)
+    print(max_energy, route)
 
 '''
 题目二 星际穿越
